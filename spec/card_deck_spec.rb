@@ -4,9 +4,9 @@ require 'pry'
 require 'player'
 
 describe "CardDeck" do
-  it 'should have 72 cards when created' do
+  it 'should have 104 cards when created' do
     deck = CardDeck.new
-    expect(deck.cards_left).to eq 72
+    expect(deck.cards_left).to eq 104
   end
 
   it 'should deal cards to players' do

@@ -15,7 +15,10 @@ class CardDeck
         end
       end.flatten
     end
-    deck[0] + deck[1]
+    special_deck = 2.times.map do
+      [Card.new('Red', 'Reverse'), Card.new('Blue', 'Reverse'), Card.new('Green', 'Reverse'), Card.new('Yellow', 'Reverse'), Card.new('Red', 'Skip'), Card.new('Blue', 'Skip'), Card.new('Green', 'Skip'), Card.new('Yellow', 'Skip'), Card.new('Red', 'Draw two'), Card.new('Blue', 'Draw two'), Card.new('Green', 'Draw two'), Card.new('Yellow', 'Draw two'), Card.new('Color', 'Wild Draw Four'), Card.new('Color', 'Wild Draw Four'), Card.new('Color', 'Wild'), Card.new('Color', 'Wild')]
+    end.flatten
+    deck[0] + deck[1] + special_deck
   end
 
   def shuffle
