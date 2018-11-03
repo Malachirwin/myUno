@@ -12,6 +12,10 @@ class Card
     @color
   end
 
+  def change_color(color)
+    @color = color
+  end
+
   def value
     "#{color} #{rank}"
   end

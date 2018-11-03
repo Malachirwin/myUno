@@ -17,14 +17,18 @@ class Player
     player_hand.count
   end
 
-  def cards
-    result = ""
-    player_hand.each do |card|
-      result.concat(card.value)
-    end
-    result
+  def take_cards(cards)
+    @cards.push(*cards)
   end
-  
+
+  def cards
+    result = []
+    player_hand.each do |card|
+      result.push(card.value)
+    end
+    result.join(", ")
+  end
+
   def set_hand(cards)
     @cards = *cards
   end
