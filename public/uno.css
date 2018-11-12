@@ -1,0 +1,142 @@
+body {
+  background-color: green;
+}
+.hand .card {
+  margin-left: -40px;
+}
+.side-right {
+  transform: rotate(90deg);
+  float: right;
+}
+.border {
+  border-style: solid;
+  background-color: #bcdada;
+}
+.match {
+  width: 40px;
+  margin-left: -30px;
+}
+.side-left {
+  transform: rotate(-90deg);
+  float: left;
+}
+.playing_space {
+  text-align: center;
+  margin-top: 140px;
+}
+.center_pile {
+  margin-top: -40px;
+  /* transform: rotate(#{rand(360)}deg); */
+}
+.result {
+  float: right;
+  float: bottom;
+  margin-right: 50px;
+  margin-left: -450px;
+  padding: 10px;
+  margin-bottom: 100px;
+}
+.player_hand {
+  margin-top: 100px;
+  text-align: center;
+}
+.player_hand img {
+  margin-left: -40px;
+}
+.player_top {
+  text-align: center;
+}
+.button {
+  background-color: lightgreen;
+}
+.number {
+  font-size: 40px;
+}
+.center {
+  text-align: center;
+}
+.loader-container {
+  margin-left: 45%;
+}
+.loader {
+  margin-left: -50px;
+  border-top: 50px solid #dce800;
+  border-bottom: 50px solid #3ea826;
+  border-right: 50px solid #3b6ec6;
+  border-left: 50px solid #ff9000;
+  border-radius: 50%;
+  width: 1px;
+  height: 1px;
+  animation: spin 0.5s linear infinite;
+}
+.bounce {
+  animation: bounce 1s linear infinite alternate;
+}
+.slide {
+  animation: slide 2s linear;
+}
+.spin {
+  animation: spin 0.5s linear infinite;
+}
+.swim {
+  animation: swim 2s infinite alternate;
+}
+@keyframes slide {
+  from {
+    margin-top: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-top: 0%;
+    width: 100%;
+  }
+}
+
+@keyframes bounce {
+  from {
+    margin-top: 0%;
+  }
+
+  to {
+    margin-top: 100%;
+  }
+}
+@keyframes swim {
+  from {
+    margin-left: 0%;
+  }
+
+  to {
+    margin-left: 90%;
+    /* -webkit-transform: scaleX(-1);
+    transform: scaleX(-1); */
+  }
+
+  0%   {left:50px; top:10px;}
+  50%{transform: rotateX(90deg);}
+  100% {left:250px; top:10px;}
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.box {
+  background-color: #218D9B;
+  height: 100px;
+  width: 100px;
+}
+
+.transform {
+  -webkit-transition: all 2s ease;
+  -moz-transition: all 2s ease;
+  -o-transition: all 2s ease;
+  -ms-transition: all 2s ease;
+  transition: all 2s ease;
+}
+
+.transform-active {
+  background-color: #45CEE0;
+  height: 200px;
+  width: 200px;
+}
