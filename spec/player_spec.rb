@@ -39,4 +39,15 @@ describe Player do
     player = Player.new("Malachi", [red6, blue3, redskip])
     expect(player.player_hand).to eq [red6, blue3, redskip]
   end
+
+  it 'sorts the players cards' do
+    red6 = Card.new("Red", 6)
+    blue3 = Card.new("Blue", 3)
+    greenskip = Card.new("Green", "Skip")
+    yellow5 = Card.new("Yellow", 5)
+    wild_draw_four = Card.new("Color", "Wild Draw Four")
+    player = Player.new("Malachi", [red6, blue3, greenskip, yellow5, wild_draw_four])
+    player.sort_hand("Blue")
+    expect(player.player_hand).to eq [blue3, greenskip, red6, yellow5, wild_draw_four]
+  end
 end

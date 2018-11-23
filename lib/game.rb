@@ -13,7 +13,24 @@ class Game
     @deck = CardDeck.new
     @deck.shuffle
     @deck.deal(@deck, *@players)
-    @played_cards = [deck.remove_top_card]
+    @played_cards = []
+    # card = deck.remove_top_card
+    # @played_cards = [card]
+    card = Card.new("Hello", "I'm not a card")
+    until card.rank.class == Integer
+      card = deck.remove_top_card
+      pervious_cards = @played_cards
+      @played_cards = [card]
+      deck.add_cards_and_shuffle(pervious_cards)
+    end
+    players.each do |this_player|
+      if this_player.cards_left < 5
+        until this_player.cards_left == 5
+          this_player.take_cards(draw_cards(1))
+        end
+      end
+    end
+
   end
 
   def player_turn
@@ -145,27 +162,33 @@ class Game
     what_happened = []
     until player_turn == 0
       players[1..3].each.with_index do |playing_player, index|
-        card_to_delete = nil
-        playing_player.player_hand.each do |card|
-          if player_turn == index + 1
-            if card.rank == played_cards.last.rank.to_s || card.color == played_cards.last.color || card.rank == "Wild Draw Four" || card.rank == "Wild"
-              card_to_delete = card
-              reverse(card)
-              skip(card)
-              draw_two(card)
-              card = wild(card, playing_player)
-              card = wild_draw_four(card, playing_player)
-              what_happened.push([playing_player.name, card.value])
-              played_cards << card
-              next_players_turn
+        if game_over? == false
+          card_to_delete = nil
+          playing_player.player_hand.each do |card|
+            if player_turn == index + 1
+              if card.rank == played_cards.last.rank.to_s || card.color == played_cards.last.color || card.rank == "Wild Draw Four" || card.rank == "Wild"
+                card_to_delete = card
+                reverse(card)
+                skip(card)
+                draw_two(card)
+                card = wild(card, playing_player)
+                card = wild_draw_four(card, playing_player)
+                what_happened.push([playing_player.name, card.value])
+                played_cards << card
+                next_players_turn
+              end
             end
           end
+        else
+          what_happened.push([game_over?, "winner"])
+          playing_player.player_hand.delete(card_to_delete)
+          return what_happened
         end
         if card_to_delete
           playing_player.player_hand.delete(card_to_delete)
         else
           if player_turn == index + 1
-            playing_player.take_cards(draw_cards(1))
+              playing_player.take_cards(draw_cards(1))
             what_happened.push([playing_player.name, "Drew a card"])
             next_players_turn
           end

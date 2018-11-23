@@ -13,12 +13,38 @@ class Player
     @name
   end
 
+  def sort_hand()
+    red = []
+    green = []
+    yellow = []
+    blue = []
+    wild = []
+    player_hand.each do |card|
+      if card.color == "Yellow"
+        yellow.push(card)
+      elsif card.color == "Blue"
+        blue.push(card)
+      elsif card.color == "Red"
+        red.push(card)
+      elsif card.color == "Green"
+        green.push(card)
+      elsif card.color == "Color" # wild's color is "Color"
+        wild.push(card)
+      end
+    end
+    @cards = wild.concat(blue).concat(green).concat(red).concat(yellow)
+  end
+
   def cards_left
     player_hand.count
   end
 
   def take_cards(cards)
     @cards.push(*cards)
+  end
+
+  def remove_card
+    @cards.shift
   end
 
   def cards

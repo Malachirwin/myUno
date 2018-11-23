@@ -8,7 +8,10 @@ require 'pusher'
 
 $player = nil
 # $pending_clients = []
+$result = nil
 $game = nil
+$what_happened = []
+$old_game_state = nil
 # $results = []
 # $counter = 0
 
@@ -32,6 +35,9 @@ class App < Sinatra::Base
     player = params["name"]
     $player = player
     $game = nil
+    $what_happened = []
+    $result = nil
+    $game = Game.new
     redirect("/game")
   end
 
@@ -41,7 +47,6 @@ class App < Sinatra::Base
   end
 
   post("/game") do
-    $what_happened = []
     if $game.game_over? == false
       request = params["request"].split.map(&:capitalize).join(' ')
       if request.split(" ").length == 1 && $card_to_play != nil
@@ -64,8 +69,9 @@ class App < Sinatra::Base
         end
         result = $game.play_a_round(card_to_play)
       end
-      if result == ("You can't play that" || "You can't play that because you don't have it")
-        $result = result
+      $result = result
+      if result == "You can't play that" || result == "You can't play that because you don't have it"
+
         redirect("/game")
       else
         $what_happened.concat($game.bots_turn)

@@ -19,7 +19,7 @@ describe 'Game' do
     expect(game.player_turn).to eq 0
   end
 
-  it 'expects that the gme deals 5 cards to 4 players and one in the played_cards' do
+  it 'expects that the game deals 5 cards to 4 players and one in the played_cards' do
     game = Game.new
     expect(game.deck.cards_left).to eq 83
   end
@@ -95,15 +95,15 @@ describe 'Game' do
   it 'Plays a round with the bots' do
     game = Game.new
     game.next_players_turn
-    game.players[1..3].each.with_index { |p, i| p.set_hand([Card.new("Blue", (i + rand(1..4)))])}
+    game.players[1..3].each.with_index { |p, i| p.set_hand([Card.new("Blue", (i + rand(1..4))), Card.new("Blue", (i + rand(1..4)))])}
+    expect(game.players[1].cards_left).to eq 2
+    expect(game.players[2].cards_left).to eq 2
+    expect(game.players[3].cards_left).to eq 2
+    game.set_played_card(Card.new("Blue", 4))
+    game.bots_turn
     expect(game.players[1].cards_left).to eq 1
     expect(game.players[2].cards_left).to eq 1
     expect(game.players[3].cards_left).to eq 1
-    game.set_played_card(Card.new("Blue", 4))
-    game.bots_turn
-    expect(game.players[1].cards_left).to eq 0
-    expect(game.players[2].cards_left).to eq 0
-    expect(game.players[3].cards_left).to eq 0
   end
 
   it 'a bot plays a wild' do
@@ -120,12 +120,12 @@ describe 'Game' do
     game = Game.new
     game.next_players_turn
     game.players[1].set_hand([Card.new("Blue", "Draw Two")])
-    game.players[2].set_hand []
+    game.players[2].set_hand [Card.new("Blue", 4)]
     expect(game.players[1].cards_left).to eq 1
     game.set_played_card(Card.new("Blue", 4))
     game.bots_turn
     expect(game.players[1].cards_left).to eq 0
-    expect(game.players[2].cards_left).to eq 2
+    expect(game.players[2].cards_left).to eq 3
   end
 
   it 'a bot plays skip' do

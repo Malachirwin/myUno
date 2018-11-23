@@ -12,10 +12,13 @@ body {
   border-style: solid;
   background-color: #bcdada;
 }
-.match {
-  width: 40px;
-  margin-left: -30px;
+
+.click-me {
+  width: 100px;
+  height: 100px;
+  background-color: red;
 }
+
 .side-left {
   transform: rotate(-90deg);
   float: left;

@@ -37,4 +37,12 @@ class Card
   def value
     "#{color} #{rank}"
   end
+
+  def card_value
+    if color != "Color"
+      "#{color} #{rank}"
+    else
+      rank
+    end
+  end
 end

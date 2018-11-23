@@ -1,3 +1,4 @@
+- $old_game_state = $game
 - winner = $game.game_over?
 - if winner != false
   center
@@ -13,6 +14,7 @@
       br
       input style="font-size: 30px;" class="button" type="submit" value="join"
 -else
+  - $game.player.sort_hand
   center
     .player_top
       == slim :hand, locals: { player: $game.players[2] }
@@ -27,29 +29,55 @@
   br
   center
     h1
-      = $player
-      ' 's hand
       - result = $result
       - $result = nil
-      = result
+      -if result.class == Card
+        = "You Played a #{result.value} last turn"
+      -elsif result.class == Array
+        = "You Drew a #{result[0].card_value}"
+      -else
+        = result
+      / br
       - if $message == "What Color do You want to change it to?"
         = $message
+        h1[style="display: inline-block"] = $player
+        h1[style="display: inline-block"] 's hand
+        form method="post"
+          select name="request"
+            option value="Blue" Blue
+            option value="Red" Red
+            option value="Green" Green
+            option value="Yellow" Yellow
+          / input style="font-size: 30px;" type="type" placeholder="Red 4" name="request" autocomplete="off"
+          / br
+          input type="submit"
       -else
 
         h1 It is your turn
         h1 Examples: Red 4, Blue Draw Two, Wild, Wild Draw Four, Yellow Revrese
-      form method="post"
-        input style="font-size: 30px;" type="type" placeholder="Red 4" name="request"
-        br
-        input type="submit"
+        h1[style="display: inline-block"] = $player
+        h1[style="display: inline-block"] 's hand
+        form method="post"
+          select name="request"
+            - $game.player.player_hand.each do |card|
+              option value="#{card.card_value}" = card.card_value
+            option value="Draw" Draw
+          / input style="font-size: 30px;" type="type" placeholder="Red 4" name="request" autocomplete="off"
+          / br
+          input type="submit"
     .hand
+      / -binding.pry
       - $game.player.player_hand.each do |card|
         img class="card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value
     - if $what_happened
-      - $what_happened.each do |thing|
-        - if thing[1][0] == "D"
-          = "#{thing[0]} #{thing[1]}"
+      - $what_happened.reverse.each do |thing|
+        - if thing[1] == "winner"
+          = "#{thing[0].name} Won the game"
           br
         - else
-          = "#{thing[0]} played #{thing[1]}"
-          br
+          - if thing[1][0] == "D"
+            = "#{thing[0]} #{thing[1]}"
+            br
+          - else
+            = "#{thing[0]} played #{thing[1]}"
+            br
