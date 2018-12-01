@@ -1,83 +1,38 @@
-- $old_game_state = $game
-- winner = $game.game_over?
-- if winner != false
-  center
-    - if winner.name != "player 1"
-      = "#{winner.name} won the game"
-    - else
-      = "You won the game!"
+- $game.players.each {|pl| pl.sort_hand}
+javascript:
+- if $game.players[1].cards_left == 1
+  javascript:
+    playersUno("player 2");
+- if $game.players[2].cards_left == 1
+  javascript:
+    playersUno("player 3");
+- if $game.players[3].cards_left == 1
+  javascript:
+    playersUno("player 4");
 
-    form action="/join_game" method="post"
-      | To play again please enter your name
-      br
-      input style="font-size: 30px;" type="type" placeholder="name" name="name"
-      br
-      input style="font-size: 30px;" class="button" type="submit" value="join"
+- winner = $game.game_over?
+/ div id="myAnimation" onclick="myMoveLeft()"
+- if winner != false
+  == slim :winner, locals: { winner: winner }
 -else
-  - $game.player.sort_hand
-  center
-    .player_top
-      == slim :hand, locals: { player: $game.players[2] }
-    .side-right
-      == slim :hand, locals: { player: $game.players[3] }
-    .side-left
-      == slim :hand, locals: { player: $game.players[1] }
-    .playing_space
-      / == slim :center_pile
-    = $game.played_cards.last.color
-    img class="your_hand" width=90 height=120 src="cards/#{$game.played_cards.last.to_img_path}" alt=$game.played_cards.last.value
+  .player_top
+    == slim :hand, locals: { player: $game.players[2], side: "top" }
+  .side-right
+    == slim :hand, locals: { player: $game.players[3], side: "right" }
+  .side-left
+    == slim :hand, locals: { player: $game.players[1], side: "left"}
+  .playing_space
+    == slim :center_pile
+    / div class="flip-box"
+    /   div class="flip-box-inner" id="flip-box-inner"
+    /     div class="flip-box-front"
+    /       img src="cards/backs.jpg" width="101" height="156" onclick="flip()"
+    /     div class="flip-box-back"
+    /       img src="cards/r6.jpg" width="101" height="156" id="theCard"
+
   br
   center
-    h1
-      - result = $result
-      - $result = nil
-      -if result.class == Card
-        = "You Played a #{result.value} last turn"
-      -elsif result.class == Array
-        = "You Drew a #{result[0].card_value}"
-      -else
-        = result
-      / br
-      - if $message == "What Color do You want to change it to?"
-        = $message
-        h1[style="display: inline-block"] = $player
-        h1[style="display: inline-block"] 's hand
-        form method="post"
-          select name="request"
-            option value="Blue" Blue
-            option value="Red" Red
-            option value="Green" Green
-            option value="Yellow" Yellow
-          / input style="font-size: 30px;" type="type" placeholder="Red 4" name="request" autocomplete="off"
-          / br
-          input type="submit"
-      -else
-
-        h1 It is your turn
-        h1 Examples: Red 4, Blue Draw Two, Wild, Wild Draw Four, Yellow Revrese
-        h1[style="display: inline-block"] = $player
-        h1[style="display: inline-block"] 's hand
-        form method="post"
-          select name="request"
-            - $game.player.player_hand.each do |card|
-              option value="#{card.card_value}" = card.card_value
-            option value="Draw" Draw
-          / input style="font-size: 30px;" type="type" placeholder="Red 4" name="request" autocomplete="off"
-          / br
-          input type="submit"
-    .hand
-      / -binding.pry
-      - $game.player.player_hand.each do |card|
-        img class="card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value
-    - if $what_happened
-      - $what_happened.reverse.each do |thing|
-        - if thing[1] == "winner"
-          = "#{thing[0].name} Won the game"
-          br
-        - else
-          - if thing[1][0] == "D"
-            = "#{thing[0]} #{thing[1]}"
-            br
-          - else
-            = "#{thing[0]} played #{thing[1]}"
-            br
+    == slim :results
+    == slim :change_color_form
+    == slim :your_hand
+    == slim :game_log

@@ -109,11 +109,13 @@ describe 'Game' do
   it 'a bot plays a wild' do
     game = Game.new
     game.next_players_turn
-    game.players[1].set_hand([Card.new("Color", "Wild")])
-    expect(game.players[1].cards_left).to eq 1
+    game.players[1].set_hand([Card.new("Color", "Wild"), Card.new("Red", 3)])
+    game.players[2].set_hand([Card.new("Red", 4), Card.new("Red", 7)])
+    game.players[3].set_hand([Card.new("Red", 2), Card.new("Red", 5)])
+    expect(game.players[1].cards_left).to eq 2
     game.set_played_card(Card.new("Blue", 4))
     game.bots_turn
-    expect(game.players[1].cards_left).to eq 0
+    expect(game.players[1].cards_left).to eq 1
   end
 
   it 'a bot plays draw two' do

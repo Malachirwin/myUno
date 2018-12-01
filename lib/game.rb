@@ -14,8 +14,6 @@ class Game
     @deck.shuffle
     @deck.deal(@deck, *@players)
     @played_cards = []
-    # card = deck.remove_top_card
-    # @played_cards = [card]
     card = Card.new("Hello", "I'm not a card")
     until card.rank.class == Integer
       card = deck.remove_top_card
@@ -130,7 +128,7 @@ class Game
   end
 
   def draw_cards(number_of_cards)
-    if deck.cards_left == 1
+    if deck.cards_left <= number_of_cards
       cards = @played_cards.shift(played_cards.length - 1)
       deck.add_cards_and_shuffle(cards)
     end
@@ -166,7 +164,27 @@ class Game
           card_to_delete = nil
           playing_player.player_hand.each do |card|
             if player_turn == index + 1
-              if card.rank == played_cards.last.rank.to_s || card.color == played_cards.last.color || card.rank == "Wild Draw Four" || card.rank == "Wild"
+              if players[next_player_number].cards_left <= 3 && playing_player.cards.include?("#{played_cards.last.color} Draw Two")
+                playing_player.player_hand.each do |card|
+                  if card.rank == "Draw Two" && card.color == played_cards.last.color
+                    card_to_delete = card
+                    draw_two(card)
+                    what_happened.push([playing_player.name, card.value])
+                    played_cards << card
+                    next_players_turn
+                  end
+                end
+              elsif players[next_player_number].cards_left <= 3 && playing_player.cards.include?("Wild Draw Four")
+                playing_player.player_hand.each do |card|
+                  if card.rank == "Wild Draw Four"
+                    card_to_delete = card
+                    card = wild_draw_four(card, playing_player)
+                    what_happened.push([playing_player.name, card.value])
+                    played_cards << card
+                    next_players_turn
+                  end
+                end
+              elsif card.rank == played_cards.last.rank.to_s || card.color == played_cards.last.color || card.rank == "Wild Draw Four" || card.rank == "Wild"
                 card_to_delete = card
                 reverse(card)
                 skip(card)
@@ -215,7 +233,11 @@ class Game
   def wild_draw_four(card, playing_player)
     if card.rank == "Wild Draw Four"
       players[next_player_number].take_cards(draw_cards(4))
-      card.change_color(playing_player.player_hand[rand(playing_player.player_hand.length - 1)].color)
+      color = playing_player.player_hand[rand(playing_player.player_hand.length)].color
+      until color != "Color"
+        color = playing_player.player_hand[rand(playing_player.player_hand.length)].color
+      end
+      card.change_color(color)
       next_players_turn
     end
     card
@@ -223,7 +245,11 @@ class Game
 
   def wild(card, playing_player)
     if card.rank == "Wild"
-      card.change_color(playing_player.player_hand[rand(playing_player.player_hand.length - 1)].color)
+      color = playing_player.player_hand[rand(playing_player.player_hand.length)].color
+      until color != "Color"
+        color = playing_player.player_hand[rand(playing_player.player_hand.length)].color
+      end
+      card.change_color(color)
     end
     card
   end

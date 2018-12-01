@@ -1,8 +1,47 @@
 body {
   background-color: green;
 }
+.hand {
+  display: inline-block;
+}
 .hand .card {
   margin-left: -40px;
+  /* display: inline-block; */
+}
+#myAnimation {
+  /* width: 50px; */
+  /* height: 50px; */
+  position: absolute;
+  /* background-color: red; */
+}
+.hidden_card {
+  /* display: none; */
+}
+.log {
+  background-color: lightgrey;
+  float: bottom;
+  float: right;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  margin-top: -350px;
+  border: 3px solid grey;
+  border-radius: 20px;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: -40px;
+}
+.book {
+  /* margin-top: -20px; */
+}
+img.draw-card {
+  margin-left: 50px;
+}
+/* .hand img {
+  display: inline-block;
+} */
+.hand .cards {
+  display: inline-block;
 }
 .side-right {
   transform: rotate(90deg);
@@ -18,7 +57,9 @@ body {
   height: 100px;
   background-color: red;
 }
-
+.cards {
+  display: inline-block;
+}
 .side-left {
   transform: rotate(-90deg);
   float: left;
@@ -84,6 +125,12 @@ body {
 .swim {
   animation: swim 2s infinite alternate;
 }
+.slide-right {
+  animation: slide-right 1s
+}
+.slide-bottom {
+  animation: slide-botton 1s
+}
 @keyframes slide {
   from {
     margin-top: 100%;
@@ -93,6 +140,26 @@ body {
   to {
     margin-top: 0%;
     width: 100%;
+  }
+}
+
+@keyframes slide-right {
+  from {
+    margin-left: 10%;
+  }
+
+  to {
+    margin-left: 300%;
+  }
+}
+
+@keyframes slide-bottom {
+  from {
+    margin-bottom: 10%;
+  }
+
+  to {
+    margin-bottom: 300%;
   }
 }
 
@@ -124,12 +191,46 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+@keyframes flip {
+  0%   {left:50px; top:10px;}
+  50%{transform: rotateX(90deg);}
+  100% {left:250px; top:10px;}
+}
 .box {
   background-color: #218D9B;
   height: 100px;
   width: 100px;
 }
+.flip-box {
+  width: 300px;
+  height: 156px;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+.flip-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
 
+/* .flip-box:hover .flip-box-inner {
+  transform: rotateY(180deg);
+} */
+.flip {
+  transform: rotateY(180deg);
+}
+.flip-box-front, .flip-box-back {
+  position: absolute;
+}
+
+.flip-box-front {
+}
+
+.flip-box-back {
+  transform: rotateY(180deg);
+}
 .transform {
   -webkit-transition: all 2s ease;
   -moz-transition: all 2s ease;
@@ -142,4 +243,10 @@ body {
   background-color: #45CEE0;
   height: 200px;
   width: 200px;
+}
+/* img.d {
+  transition: transform .2 ease-in-out;
+} */
+img.d {
+  transform: translate3d(0px, 150px, 0px);
 }

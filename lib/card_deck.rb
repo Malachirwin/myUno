@@ -49,6 +49,11 @@ class CardDeck
 
   def add_cards_and_shuffle(cards)
     @deck.concat(cards)
+    @deck.each do |card|
+      if card.rank == "Wild" || card.rank == "Wild Draw Four"
+        card.change_color("Color")
+      end
+    end
     shuffle
   end
 

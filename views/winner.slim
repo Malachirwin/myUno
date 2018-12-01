@@ -1,0 +1,12 @@
+center
+  - if winner.name != "player 1"
+    = "#{winner.name} won the game"
+  - else
+    = "You won the game!"
+
+  form action="/join_game" method="post"
+    | To play again please enter your name
+    br
+    input style="font-size: 30px;" type="type" placeholder="name" name="name"
+    br
+    input style="font-size: 30px;" class="button" type="submit" value="join"

@@ -1,0 +1,10 @@
+h1
+  - result = $result
+  - $result = nil
+
+  -if result.class == Card
+    = "You Played a #{result.value} last turn"
+  -elsif result.class == Array
+    = "You Drew a #{result[0].card_value}"
+  -else
+    = result

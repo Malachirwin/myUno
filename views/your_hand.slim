@@ -1,0 +1,15 @@
+form method="post" action="uno"
+  input name="uno" type="hidden" value="yes"
+  input style="font-size: 30px;" type="submit" class="button" value="uno"
+h3 style="font-size: 30px;" It is your turn
+h1 = $game.direction
+h1[style="display: inline-block"] = $player
+h1[style="display: inline-block"] 's hand
+br
+.hand
+  - $game.player.player_hand.each.with_index do |card, index|
+    -if index == 0
+      img class="card" id="theCard" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCard('#{card.value}')"
+    -else
+      img class="card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCard('#{card.value}')"
+br

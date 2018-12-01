@@ -22,4 +22,14 @@ describe "CardDeck" do
     deck = CardDeck.new
     expect(deck.has_cards?).to eq true
   end
+
+  it 'readds cards to the deck and resets cards value' do
+    deck = CardDeck.new
+    deck.remove_all_cards_from_deck
+    red_wild = Card.new("Red", "Wild")
+    blue_wild_draw_four = Card.new("Blue", "Wild Draw Four")
+    deck.add_cards_and_shuffle([blue_wild_draw_four, red_wild])
+    expect(blue_wild_draw_four.color).to eq "Color"
+    expect(red_wild.color).to eq "Color"
+  end
 end
