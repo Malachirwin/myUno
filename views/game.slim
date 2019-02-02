@@ -22,7 +22,7 @@ javascript:
   .side-left
     == slim :hand, locals: { player: $game.players[1], side: "left"}
   .playing_space
-    == slim :center_pile, locals: { game: $game}
+    == slim :center_pile, locals: { game: $game, message: $message}
     / div class="flip-box"
     /   div class="flip-box-inner" id="flip-box-inner"
     /     div class="flip-box-front"

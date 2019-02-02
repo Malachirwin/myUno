@@ -22,13 +22,7 @@ javascript:
   .side-left
     == slim :hand, locals: { player: $crazy_game.players[1], side: "left"}
   .playing_space
-    == slim :center_pile, locals: { game: $crazy_game}
-    / div class="flip-box"
-    /   div class="flip-box-inner" id="flip-box-inner"
-    /     div class="flip-box-front"
-    /       img src="cards/backs.jpg" width="101" height="156" onclick="flip()"
-    /     div class="flip-box-back"
-    /       img src="cards/r6.jpg" width="101" height="156" id="theCard"
+    == slim :center_pile, locals: { game: $crazy_game, message: $crazy_message}
 
   br
   center
