@@ -1,5 +1,7 @@
 body {
   background-color: green;
+  border: solid;
+  border-color: #ff6100;
 }
 .hand {
   display: inline-block;
@@ -94,7 +96,7 @@ img.draw-card {
   text-align: center;
 }
 .button {
-  background-color: lightgreen;
+  background-color: #ff6100;
 }
 .number {
   font-size: 40px;
