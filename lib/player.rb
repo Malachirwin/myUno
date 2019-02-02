@@ -42,11 +42,7 @@ class Player
   def take_cards(cards)
     @cards.push(*cards)
   end
-
-  def remove_card
-    @cards.shift
-  end
-
+  
   def cards
     result = []
     player_hand.each do |card|

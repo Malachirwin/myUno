@@ -15,6 +15,14 @@ describe Player do
     expect(player.cards_left).to be 1
   end
 
+  it 'returns the number of cards left in the players hand' do
+    red6 = Card.new("Red", 6)
+    blue3 = Card.new("Blue", 3)
+    redskip = Card.new("Red", "Skip")
+    player = Player.new("Malachi", [red6, blue3, redskip])
+    expect(player.cards_left).to eq 3
+  end
+
   it 'takes cards' do
     player = Player.new('name', [Card.new("Blue", 4), Card.new("Green", "Skip")])
     red6 = Card.new("Red", 6)
