@@ -21,7 +21,8 @@ describe 'Game' do
 
   it 'expects that the game deals 5 cards to 4 players and one in the played_cards' do
     game = Game.new
-    expect(game.deck.cards_left).to eq 83
+    num_of_cards_left_after_shuffling = 83
+    expect(game.deck.cards_left).to eq num_of_cards_left_after_shuffling
   end
 
   it 'expects that you can set the played_cards and ask what are all the cards in the pile' do
@@ -42,7 +43,8 @@ describe 'Game' do
     game.player.set_hand([wild_four])
     game.play_a_round(game.player.player_hand.first.value)
     expect(game.player.cards).to_not include 'Color Wild Draw Four'
-    expect(game.players[1].cards_left).to eq 9
+    num_of_cards_after_drawing_4 = 9
+    expect(game.players[1].cards_left).to eq num_of_cards_after_drawing_4
     expect(game.played_cards).to include wild_four
   end
 
@@ -52,7 +54,8 @@ describe 'Game' do
     game.set_played_card(game.player.player_hand.first)
     game.play_a_round(game.player.player_hand.first.value)
     expect(game.player.cards).to_not include 'Red Draw Two'
-    expect(game.players[1].cards_left).to eq 7
+    num_of_cards_after_drawing_2 = 7
+    expect(game.players[1].cards_left).to eq num_of_cards_after_drawing_2
   end
 
   it 'Plays a round with a skip' do
@@ -96,9 +99,11 @@ describe 'Game' do
     game = Game.new
     game.next_players_turn
     game.players[1..3].each.with_index { |p, i| p.set_hand([Card.new("Blue", (i + rand(1..4))), Card.new("Blue", (i + rand(1..4)))])}
-    expect(game.players[1].cards_left).to eq 2
-    expect(game.players[2].cards_left).to eq 2
-    expect(game.players[3].cards_left).to eq 2
+    oridonal_num_of_cards = 3
+    one_card = 1
+    expect(game.players[1].cards_left).to eq oridonal_num_of_cards - one_card
+    expect(game.players[2].cards_left).to eq oridonal_num_of_cards - one_card
+    expect(game.players[3].cards_left).to eq oridonal_num_of_cards - one_card
     game.set_played_card(Card.new("Blue", 4))
     game.bots_turn
     expect(game.players[1].cards_left).to eq 1
