@@ -48,6 +48,6 @@ describe Player do
     wild_draw_four = Card.new("Color", "Wild Draw Four")
     player = Player.new("Malachi", [red6, blue3, greenskip, yellow5, wild_draw_four])
     player.sort_hand()
-    expect(player.player_hand).to eq [blue3, greenskip, red6, yellow5, wild_draw_four]
+    expect(player.player_hand).to eq [wild_draw_four, blue3, greenskip, red6, yellow5]
   end
 end
