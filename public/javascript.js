@@ -11,8 +11,34 @@ function playCard(card) {
   // bottom();
 }
 
+function playCrazyCard(card) {
+  var data = {card: card};
+  fetch('/crazy_game', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  window.location.reload();
+  // bottom();
+}
+
+
 function playersUno(name) {
   alert(`${name} said 'Uno'`);
+}
+
+function drawACrazyCard() {
+  var data = {card: "Draw"};
+  fetch('/crazy_game', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  window.location.reload();
 }
 
 function drawACard() {
@@ -26,6 +52,7 @@ function drawACard() {
   });
   window.location.reload();
 }
+
 function flip() {
   document.getElementById("flip-box-inner").className = "flip-box-inner flip";
   // document.getElementById("myDIV").className = "mystyle"

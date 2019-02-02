@@ -1,10 +1,12 @@
-- if $what_happened != []
+- if what_happened != []
   .log
-    - $what_happened.reverse.each do |thing|
+    - what_happened.reverse.each do |thing|
       - if thing[1] == "winner"
         .book = "#{thing[0].name} Won the game"
       - else
         - if thing[1][0] == "D"
           .book = "#{thing[0]} #{thing[1]}"
+        -elsif thing[0] == "Round"
+          h1.book = "#{thing[0]} #{thing[1]}"
         - else
           .book = "#{thing[0]} played #{thing[1]}"

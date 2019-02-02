@@ -1,5 +1,8 @@
-h1 = $game.played_cards.last.color
+h1 = game.played_cards.last.color
 br
-img class="card" width=90 height=120 style="margin-right: 50px;" src="cards/#{$game.played_cards.last.to_img_path}" alt=$game.played_cards.last.value
-- if $game.deck.has_cards?
-  img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACard()"
+img class="card" width=90 height=120 style="margin-right: 50px;" src="cards/#{game.played_cards.last.to_img_path}" alt=game.played_cards.last.value
+- if game.deck.has_cards?
+  -if game.class == Game
+    img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACard()"
+  -else
+    img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACrazyCard()"

@@ -32,7 +32,7 @@ class Player
         wild.push(card)
       end
     end
-    @cards = wild.concat(blue).concat(green).concat(red).concat(yellow)
+    @cards = blue.concat(green).concat(red).concat(yellow).concat(wild)
   end
 
   def cards_left

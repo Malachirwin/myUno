@@ -2,7 +2,7 @@ require_relative 'player'
 require_relative 'card_deck'
 require 'pry'
 
-class Game
+class CrazyGame
   def initialize
     @players = []
     4.times do |index|
@@ -14,6 +14,7 @@ class Game
     @deck.shuffle
     @deck.deal(@deck, *@players)
     @played_cards = []
+    @number_of_cards_to_pickup = 0
     card = Card.new("Hello", "I'm not a card")
     until card.rank.class == Integer
       card = deck.remove_top_card
