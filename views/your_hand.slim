@@ -14,9 +14,9 @@ br
 -if game.class == Game
   .hand
     - game.player.player_hand.each do |card|
-      img class="card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCard('#{card.value}')"
+      img class="player_card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCard('#{card.value}')"
 -else
   .hand
     - game.player.player_hand.each do |card|
-      img class="card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCrazyCard('#{card.value}')"
+      img class="player_card" width=90 height=120 src="cards/#{card.to_img_path}" alt=card.value onclick="playCrazyCard('#{card.value}')"
 br
