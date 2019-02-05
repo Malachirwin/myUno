@@ -2,15 +2,3 @@
   h2 = player.name
   - player.cards_left.times do
     img class="card" width=71 height=96 src="cards/backs.jpg" alt="card back"
-    / -if side == "left"
-    /   / -binding.pry
-    /   // javascript:
-    /   //   myMoveLeft()
-    /   // div id="myAnimation" onclick="myMoveLeft()"
-    /   //   img.card.flip width=71 height=96 src="cards/backs.jpg" alt="card back"
-    /   div class="flip-box" style="transform: rotate(90deg); margin-left:150px;"
-    /     div class="flip-box-inner" id="flip-box-inner"
-    /       div class="flip-box-front"
-    /         img src="cards/backs.jpg" width="101" height="156" onclick="flip()"
-    /       div class="flip-box-back"
-    /         img src="cards/r6.jpg" width="101" height="156" id="theCard"

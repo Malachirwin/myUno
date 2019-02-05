@@ -1,240 +1,148 @@
 require "pry"
 require "sinatra"
 require "sinatra/reloader"
-#require './lib/encrypting_and_decrypting'
+require './lib/encrypting_and_decrypting'
 require "./lib/game"
-require "./lib/crazy_game"
+require "./lib/game_holder"
 require 'pusher'
 require "json"
 require "sinatra/json"
-$player = nil
-$result = nil
-$game = nil
-$what_happened = []
-$must_say_uno = "no"
-$round = 1
-$crazy_player = nil
-$crazy_game = nil
-$crazy_what_happened = []
-$crazy_result = nil
-$crazy_must_say_uno = "no"
-$crazy_round = 1
-$crazy_game = nil
+$data_base = {}
 class App < Sinatra::Base
-  # MESSAGE_KEY = OpenSSL::Cipher.new('DES-EDE3-CBC').encrypt.random_key
-  # NUMBER_OF_PLAYERS = 4
-  def pusher_client
-    @pusher_client ||= Pusher::Client.new(
-      app_id: "547002",
-      key: "e09b3296658d893c5367",
-      secret: "1b2821037b4218f1ee2c",
-      cluster: "us2"
-    )
-  end
+  MESSAGE_KEY = OpenSSL::Cipher.new('DES-EDE3-CBC').encrypt.random_key
 
   get("/") do
     slim(:welcome_join)
   end
 
   post('/uno') do
-    if $game.player.cards_left == 1
+    client_num = params["client_number"].to_i
+    if $data_base[client_num].game.player.cards_left == 1
       uno = params["uno"]
       if uno == "yes"
-        $must_say_uno = "no"
+        $data_base[client_num].player_said_uno
       end
     else
-      $game.player.take_cards($game.draw_cards(2))
+      $data_base[client_num].game.player.take_cards($data_base[client_num].game.draw_cards(2))
     end
-    redirect("/game")
-  end
-
-  post('/crazy_uno') do
-    if $crazy_game.player.cards_left == 1
-      uno = params["uno"]
-      if uno == "yes"
-        $crazy_must_say_uno = "no"
-      end
-    else
-      $crazy_game.player.take_cards($crazy_game.draw_cards(2))
-    end
-    redirect("/crazy_game")
+    redirect("/game?client_number=#{encrypt_client_number client_num}")
   end
 
   post('/join_game') do
-    player = params["name"].strip
-    if player == ''
+    player_name = params["name"].strip
+    if player_name == ''
       redirect("/")
     else
-      if params["option"] == "Regular"
-        $player = player
-        $game = nil
-        $what_happened = []
-        $result = nil
-        $round = 1
-        $must_say_uno = "no"
-        $game = Game.new
-        redirect("/game")
-      elsif params["option"] == "Crazy Game"
-        $crazy_player = player
-        $crazy_game = nil
-        $crazy_what_happened = []
-        $result = nil
-        $crazy_must_say_uno = "no"
-        $crazy_round = 1
-        $crazy_game = CrazyGame.new
-        redirect("/crazy_game")
-      end
+      $data_base[$data_base.length] = (GameHolder.new(game: Game.new, player_name: player_name))
+      redirect("/game?client_number=#{encrypt_client_number($data_base.length - 1)}")
     end
   end
 
   get("/game") do
-    if $game
+    if $data_base[client_number]
       slim(:game)
     else
       redirect("/")
     end
   end
 
-  get('/crazy_game') do
-    if $crazy_game
-      slim(:crazy_game)
-    else
-      redirect("/")
-    end
-  end
-
   post("/game") do
-    if $must_say_uno == "yes"
-      $game.player.take_cards($game.draw_cards(2))
-      $result = "You Forgot to say uno"
-      $must_say_uno = "no"
-      redirect("/game")
-    else
-      hash = {status: 200}
-      if not $game.game_over?
-        if params == {}
-          json_object = JSON.parse(request.body.read)
-          card = json_object["card"].split.map(&:capitalize).join(' ')
-        else
-          if params["color_request"]
-            card = params["color_request"]
-          else
-            card = params["color"]
-          end
-        end
-        if card.split(" ").length == 1 && $card_to_play != nil
-          card_to_play = $card_to_play
-          $card_to_play = nil
-          color = card
-          result = $game.play_a_round(card_to_play, color)
-          $message = nil
-        else
-          if card == "Color Wild"
-            $card_to_play = "Color Wild"
-            $message = "What Color do You want to change it to?"
-            redirect("/game")
-            return json hash
-          elsif card == "Color Wild Draw Four"
-            $card_to_play = "Color Wild Draw Four"
-            $message = "What Color do You want to change it to?"
-            redirect("/game")
-            return json hash
-          else
-            card_to_play = card
-          end
-          result = $game.play_a_round(card_to_play)
-        end
-        $result = result
-        if result == "You can't play that" || result == "You can't play that because you don't have it"
-
-          redirect("/game")
-          return json hash
-        else
-          $what_happened.concat($game.bots_turn)
-          $what_happened.push ["Round", $round.to_s]
-          $round += 1
-          if $game.player.cards_left == 1
-            $must_say_uno = "yes"
-          end
-          if $game.player.cards_left == 2
-            $must_say_uno = "no"
-          end
-          redirect("/game")
-          return json hash
-        end
+    hash = {status: 200}
+    if params == {}
+      json_object = JSON.parse(request.body.read)
+      client_num = json_object["client_number"].to_i
+      if not $data_base[client_num].game.game_over?
+        card = json_object["card"].split.map(&:capitalize).join(' ')
       else
-        @winner = $game.game_over?
+        @winner = $data_base[client_num].game.game_over?
+        $data_base.delete(client_num)
         redirect("/game")
         return json hash
       end
-    end
-  end
-
-
-  post("/crazy_game") do
-    if $crazy_must_say_uno == "yes"
-      $crazy_game.player.take_cards($crazy_game.draw_cards(2))
-      $crazy_result = "You Forgot to say uno"
-      $crazy_must_say_uno = "no"
-      redirect("/crazy_game")
     else
-      hash = {status: 200}
-      if not $crazy_game.game_over?
-        if params == {}
-          json_object = JSON.parse(request.body.read)
-          card = json_object["card"].split.map(&:capitalize).join(' ')
+      if params["color"] != nil
+        client_num = client_number
+        if not $data_base[client_num].game.game_over?
+          card = params["color"]
         else
-          if params["color_request"]
-            card = params["color_request"]
-          else
-            card = params["color"]
-          end
-        end
-        if card.split(" ").length == 1 && $crazy_card_to_play != nil
-          card_to_play = $crazy_card_to_play
-          $crazy_card_to_play = nil
-          color = card
-          result = $crazy_game.play_a_round(card_to_play, color)
-          $crazy_message = nil
-        else
-          if card == "Color Wild"
-            $crazy_card_to_play = "Color Wild"
-            $crazy_message = "What Color do You want to change it to?"
-            redirect("/crazy_game")
-            return json hash
-          elsif card == "Color Wild Draw Four"
-            $crazy_card_to_play = "Color Wild Draw Four"
-            $crazy_message = "What Color do You want to change it to?"
-            redirect("/crazy_game")
-            return json hash
-          else
-            card_to_play = card
-          end
-          result = $crazy_game.play_a_round(card_to_play)
-        end
-        $crazy_result = result
-        if result == "You can't play that" || result == "You can't play that because you don't have it"
-
-          redirect("/crazy_game")
-          return json hash
-        else
-          $crazy_what_happened.concat($crazy_game.bots_turn)
-          $crazy_what_happened.push ["Round", $crazy_round.to_s]
-          $crazy_round += 1
-          if $crazy_game.player.cards_left == 1
-            $crazy_must_say_uno = "yes"
-          end
-          if $crazy_game.player.cards_left == 2
-            $crazy_must_say_uno = "no"
-          end
-          redirect("/crazy_game")
+          @winner = $data_base[client_num].game.game_over?
+          $data_base.delete(client_num)
+          redirect("/game")
           return json hash
         end
       else
-        @winner = $crazy_game.game_over?
-        redirect("/crazy_game")
-        return json hash
+        client_num = params["client_number"].to_i
+        if not $data_base[client_num].game.game_over?
+          if params["color_request"] != nil
+            card = params["color_request"]
+          end
+        else
+          @winner = $data_base[client_num].game.game_over?
+          $data_base.delete(client_num)
+          redirect("/game")
+          return json hash
+        end
       end
     end
+    if $data_base[client_num].must_say_uno == "yes"
+      $data_base[client_num].game.player.take_cards($game.draw_cards(2))
+      $data_base[client_num].change_result("You Forgot to say uno")
+      $data_base[client_num].player_said_uno
+      redirect("/game?client_number=#{encrypt_client_number client_num}")
+    end
+    if card.split(" ").length == 1 && $data_base[client_num].wild_card_holder != nil
+      card_to_play = $data_base[client_num].wild_card_holder
+      $data_base[client_num].reset_wild_card_holder
+      color = card
+      result = $data_base[client_num].game.play_a_round(card_to_play, color)
+      $data_base[client_num].reset_message
+    else
+      if card == "Color Wild"
+        $data_base[client_num].set_wild_card_holder("Color Wild")
+        $data_base[client_num].change_message("What Color do You want to change it to?")
+        redirect("/game?client_number=#{encrypt_client_number client_num}")
+        return json hash
+      elsif card == "Color Wild Draw Four"
+        $data_base[client_num].set_wild_card_holder("Color Wild Draw Four")
+        $data_base[client_num].change_message("What Color do You want to change it to?")
+        redirect("/game?client_number=#{encrypt_client_number client_num}")
+        return json hash
+      else
+        card_to_play = card
+      end
+      result = $data_base[client_num].game.play_a_round(card_to_play)
+    end
+    $data_base[client_num].change_result(result)
+    if result == "You can't play that" || result == "You can't play that because you don't have it"
+
+      redirect("/game?client_number=#{encrypt_client_number client_num}")
+      return json hash
+    else
+      $data_base[client_num].add_what_happened($data_base[client_num].game.bots_turn)
+      $data_base[client_num].add_what_happened([["Round", $data_base[client_num].round.to_s]])
+      $data_base[client_num].increase_round
+      if $data_base[client_num].game.player.cards_left == 1
+        $data_base[client_num].player_needs_to_say_uno
+      end
+      if $data_base[client_num].game.player.cards_left == 2
+        $data_base[client_num].player_said_uno
+      end
+      redirect("/game?client_number=#{encrypt_client_number client_num}")
+      return json hash
+    end
+  end
+
+  private
+
+  def client_number
+    decrypt_client_number(params['client_number'])
+  end
+
+  def encrypt_client_number(number)
+    "hello-#{number.to_s}-dolly".encrypt(MESSAGE_KEY)
+  end
+
+  def decrypt_client_number(text)
+    text.decrypt(MESSAGE_KEY).split('-')[1].to_i
   end
 end

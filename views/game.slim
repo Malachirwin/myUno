@@ -1,38 +1,31 @@
-- $game.players.each {|pl| pl.sort_hand}
+- $data_base[client_number].game.players.each {|pl| pl.sort_hand}
 javascript:
-- if $game.players[1].cards_left == 1
+- if $data_base[client_number].game.players[1].cards_left == 1
   javascript:
     playersUno("player 2");
-- if $game.players[2].cards_left == 1
+- if $data_base[client_number].game.players[2].cards_left == 1
   javascript:
     playersUno("player 3");
-- if $game.players[3].cards_left == 1
+- if $data_base[client_number].game.players[3].cards_left == 1
   javascript:
     playersUno("player 4");
 
-- winner = $game.game_over?
+- winner = $data_base[client_number].game.game_over?
 / div id="myAnimation" onclick="myMoveLeft()"
 - if winner != false
   == slim :winner, locals: { winner: winner }
 -else
   .player_top
-    == slim :hand, locals: { player: $game.players[2], side: "top" }
+    == slim :hand, locals: { player: $data_base[client_number].game.players[2], side: "top" }
   .side-right
-    == slim :hand, locals: { player: $game.players[3], side: "right" }
+    == slim :hand, locals: { player: $data_base[client_number].game.players[3], side: "right" }
   .side-left
-    == slim :hand, locals: { player: $game.players[1], side: "left"}
+    == slim :hand, locals: { player: $data_base[client_number].game.players[1], side: "left"}
   .playing_space
-    == slim :center_pile, locals: { game: $game, message: $message}
-    / div class="flip-box"
-    /   div class="flip-box-inner" id="flip-box-inner"
-    /     div class="flip-box-front"
-    /       img src="cards/backs.jpg" width="101" height="156" onclick="flip()"
-    /     div class="flip-box-back"
-    /       img src="cards/r6.jpg" width="101" height="156" id="theCard"
-
+    == slim :center_pile, locals: { game: $data_base[client_number].game, message: $data_base[client_number].message}
   br
   center
-    == slim :results, locals: { result: $result}
-    == slim :change_color_form, locals: { message: $message}
-    == slim :your_hand, locals: { game: $game, player: $player}
-    == slim :game_log, locals: { what_happened: $what_happened}
+    == slim :results, locals: { result: $data_base[client_number].result}
+    == slim :change_color_form, locals: { message: $data_base[client_number].message}
+    == slim :your_hand, locals: { game: $data_base[client_number].game, player: $data_base[client_number].player_name}
+    == slim :game_log, locals: { what_happened: $data_base[client_number].what_happened}

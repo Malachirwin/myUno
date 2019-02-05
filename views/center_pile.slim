@@ -5,7 +5,4 @@ img class="card" width=90 height=120 style="margin-right: 50px;" src="cards/#{ga
   img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back"
 -else
   - if game.deck.has_cards?
-    -if game.class == Game
-      img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACard()"
-    -else
-      img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACrazyCard()"
+    img class="draw-card" width=90 height=120 src="cards/backs.jpg" alt="card back" onclick="drawACard('#{client_number}')"

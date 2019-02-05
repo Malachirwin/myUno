@@ -37,7 +37,7 @@ RSpec.describe App, type: :feature do
       expect(page).to have_content "Malachi"
       card = find(".draw-card", match: :first)
       card.click
-      expect(page.all(".player_card").count).to be >= 6
+      expect(page.all(".player_card").count).to be >= 6 # they start with 5 cards so they should have 6 or more
     end
   end
 end
