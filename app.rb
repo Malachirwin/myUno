@@ -85,7 +85,7 @@ class App < Sinatra::Base
       end
     end
     if $data_base[client_num].must_say_uno == "yes"
-      $data_base[client_num].game.player.take_cards($game.draw_cards(2))
+      $data_base[client_num].game.player.take_cards($data_base[client_num].game.draw_cards(2))
       $data_base[client_num].change_result("You Forgot to say uno")
       $data_base[client_num].player_said_uno
       redirect("/game?client_number=#{encrypt_client_number client_num}")
