@@ -27,5 +27,5 @@ javascript:
   center
     == slim :results, locals: { result: $data_base[client_number].result}
     == slim :change_color_form, locals: { message: $data_base[client_number].message}
-    == slim :your_hand, locals: { game: $data_base[client_number].game, player: $data_base[client_number].player_name}
+    == slim :your_hand, locals: { game: $data_base[client_number].game, player: $data_base[client_number].player_name, message: $data_base[client_number].message}
     == slim :game_log, locals: { what_happened: $data_base[client_number].what_happened}

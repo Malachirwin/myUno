@@ -1,3 +1,11 @@
+- if message != "What Color do You want to change it to?"
+  -if message.class == Card
+    h1 = "You played a #{message.card_value}"
+  -elsif message.class == Array
+    h1 = "You drew #{message[0].card_value}"
+  -else
+    h1 = message
+
 -if game.class == Game
   form method="post" action="uno"
     input name="uno" type="hidden" value="yes"
