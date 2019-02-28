@@ -70,7 +70,6 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
-    ruby (0.1.0)
     rubyzip (1.2.2)
     selenium-webdriver (3.141.0)
       childprocess (~> 0.5)
@@ -107,7 +106,6 @@ DEPENDENCIES
   rack
   react
   rspec
-  ruby
   selenium-webdriver
   sinatra
   sinatra-contrib

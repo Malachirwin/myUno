@@ -6,7 +6,6 @@ gem 'sinatra-contrib'
 gem 'rack'
 gem 'launchy'
 gem 'react'
-gem 'ruby'
 
 group :test do
   gem 'rspec'
